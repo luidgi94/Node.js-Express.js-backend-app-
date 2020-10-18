@@ -51,15 +51,15 @@ const server= http.createServer(app) ;// on crée serveur node  avec l'argument 
 //  utilisez une fenêtre de navigateur pour accéder à http://localhost:3000 
 
 server.on('error', errorHandler);
-server.on('listening', () => {
+server.on('listening', () => { 
   const address = server.address();
   const bind = typeof address === 'string' ? 'pipe ' + address : 'port ' + port;
   console.log('Listening on ' + bind);
-});
+}); 
 
 server.listen(port); // un écouteur d'évènements est également enregistré, consignant le port ou le canal nommé sur lequel le serveur s'exécute dans la console.
 
 
 //CORS signifie « Cross Origin Resource Sharing ». Il s'agit d'un système de sécurité qui, par défaut,
 // bloque les appels HTTP d'être effectués entre des serveurs différents, ce qui empêche donc les requêtes malveillantes d'accéder à des ressources sensibles. Dans notre cas, nous avons deux origines : localhost:3000 et localhost:4200 , et nous souhaiterions qu'elles puissent communiquer entre elles.
-// Pour cela, nous devons ajouter des headers à notre objet  response .
+// Pour cela, nous devons ajouter des headers à notre objet  response . 

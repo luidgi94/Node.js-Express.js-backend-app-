@@ -1,8 +1,10 @@
 const express = require('express');
+const path = require('path'); // traiter les route statique deu dossier image
 const app = express();
-const Thing = require('./models/thing');
-/* connection au cluster mongoDB */
 const mongoose = require('mongoose');
+const userRoutes = require('./routes/user'); // pour inscriotion et authentification
+const stuffRoutes = require('./routes/stuff');
+/* connection au cluster mongoDB */
 mongoose.connect('mongodb+srv://luidgi:underworld@clusterbyluidgi.bw0ue.mongodb.net/Clusterbyluidgi?retryWrites=true&w=majority', 
   { useNewUrlParser: true,
     useUnifiedTopology: true })
@@ -10,7 +12,8 @@ mongoose.connect('mongodb+srv://luidgi:underworld@clusterbyluidgi.bw0ue.mongodb.
   .catch(() => console.log('Connexion à MongoDB échouée !'));
 
 
-const bodyParser = require('body-parser'); // dependance qui traduit le json recu par la requette en objet javascript utilisable
+const bodyParser = require('body-parser'); // dépendance qui traduit le json reçu par la requette en objet javascript utilisable
+
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
@@ -19,34 +22,7 @@ app.use((req, res, next) => {
   });
 
 app.use(bodyParser.json());
-app.post('/api/stuff', (req, res, next) => { // gère que les requetes post: creation d'enregistrement d'objet dans la base de données
-  console.log(req.body);
-  delete req.body._id;
-  const thing = new Thing({
-    ...req.body
-  });
-  thing.save()
-    .then(() => res.status(201).json({ message: 'Objet enregistré !'}))
-    .catch(error => res.status(400).json({ error }));
-});
-
-app.get('/api/stuff/:id', (req, res, next) => {
-  Thing.findOne({ _id: req.params.id })
-    .then(thing => res.status(200).json(thing))
-    .catch(error => res.status(404).json({ error }));
-});
-
-app.put('/api/stuff/:id', (req, res, next) => {
-  Thing.updateOne({ _id: req.params.id }, { ...req.body, _id: req.params.id })
-    .then(() => res.status(200).json({ message: 'Objet modifié !'}))
-    .catch(error => res.status(400).json({ error }));
-});
-
-
-app.use('/api/stuff', (req, res, next) => { // attention ! gère tous types de requetes mettre les requetes post avant! 
-    Thing.find() // renvoi tous les objets de la collection Thing sur mongoDB
-    .then(things => res.status(200).json(things))
-    .catch(error => res.status(400).json({ error }));
-  });
- 
+app.use('/images', express.static(path.join(__dirname, 'images'))); // Cela indique à Express qu'il faut gérer la ressource images de manière statique (un sous-répertoire de notre répertoire de base, __dirname ) à chaque fois qu'elle reçoit une requête vers la route /images
+app.use('/api/stuff', stuffRoutes); // le chemin /api/stuff est rajouté au chemin sur les stuffRoutes
+app.use('/api/auth', userRoutes); // le chemin /api/aht est rajouté au chemin sur les userRoutes
 module.exports = app; // on export l'app express pour l'uttiliser dans toute l'application
