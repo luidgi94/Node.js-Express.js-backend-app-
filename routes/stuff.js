@@ -6,7 +6,7 @@ const auth = require('../middleware/auth');
 const stuffCtrl = require('../controllers/stuff');
 const multer = require('../middleware/multer-config');
 
-// Attention le middleware "auth" est toujour le premier argument pour des question de sécurité 
+//le middleware "auth" est toujour le premier argument pour des questions de sécurité 
 router.get('/',auth, stuffCtrl.getAllStuff);
 router.post('/',auth, multer, stuffCtrl.createThing);
 router.get('/:id',auth, stuffCtrl.getOneThing);
@@ -14,6 +14,9 @@ router.put('/:id', multer, stuffCtrl.modifyThing);
 router.delete('/:id', auth, stuffCtrl.deleteThing);
 
 module.exports = router;
+
+
+
 
 
 

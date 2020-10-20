@@ -60,9 +60,9 @@ exports.modifyThing = (req, res, next) => {
 exports.deleteThing = (req, res, next) => {
   Thing.findOne({ _id: req.params.id })
   .then(thing => {
-    const filename = thing.imageUrl.split('/images/')[1]; // split crée un tableau a 2 argument avant et après '/image/'  utilisons le fait de savoir que notre URL d'image contient un segment /images/ pour séparer le nom de fichier ;
-    fs.unlink(`images/${filename}`, () => {   //unlink du package fs pour supprimer ce fichier, en lui passant le fichier à supprimer et le callback à exécuter une fois ce fichier supprimé ;
-      Thing.deleteOne({ _id: req.params.id })  // supprimant le Thing de la base de données.
+    const filename = thing.imageUrl.split('/images/')[1]; // split crée un tableau à 2 arguments avant et après '/image/'  utilisons le fait de savoir que notre URL d'image contient un segment /images/ pour séparer le nom de fichier ;
+    fs.unlink(`images/${filename}`, () => {   //la fonctionunlink du package fs permet de supprimer ce fichier, en lui passant le fichier à supprimer et le callback à exécuter une fois ce fichier supprimé ;
+      Thing.deleteOne({ _id: req.params.id })  // supprime le Thing de la base de données.
         .then(() => res.status(200).json({ message: 'Objet supprimé !'}))
         .catch(error => res.status(400).json({ error }));
     });

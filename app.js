@@ -1,8 +1,8 @@
 const express = require('express');
-const path = require('path'); // traiter les route statique deu dossier image
+const path = require('path'); // traiter les route statiquse du dossier image
 const app = express();
 const mongoose = require('mongoose');
-const userRoutes = require('./routes/user'); // pour inscriotion et authentification
+const userRoutes = require('./routes/user'); // pour inscription et authentification
 const stuffRoutes = require('./routes/stuff');
 /* connection au cluster mongoDB */
 mongoose.connect('mongodb+srv://luidgi:underworld@clusterbyluidgi.bw0ue.mongodb.net/Clusterbyluidgi?retryWrites=true&w=majority', 
@@ -24,5 +24,5 @@ app.use((req, res, next) => {
 app.use(bodyParser.json());
 app.use('/images', express.static(path.join(__dirname, 'images'))); // Cela indique à Express qu'il faut gérer la ressource images de manière statique (un sous-répertoire de notre répertoire de base, __dirname ) à chaque fois qu'elle reçoit une requête vers la route /images
 app.use('/api/stuff', stuffRoutes); // le chemin /api/stuff est rajouté au chemin sur les stuffRoutes
-app.use('/api/auth', userRoutes); // le chemin /api/aht est rajouté au chemin sur les userRoutes
-module.exports = app; // on export l'app express pour l'uttiliser dans toute l'application
+app.use('/api/auth', userRoutes); // le chemin /api/auth est rajouté au chemin sur les userRoutes
+module.exports = app; // on export l'app express pour l'utiliser dans toute l'application
